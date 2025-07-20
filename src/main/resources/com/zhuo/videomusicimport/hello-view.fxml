@@ -30,7 +30,7 @@
             <ComboBox fx:id="formatComboBox" styleClass="format-combo-box" promptText="选择格式"/>
         </HBox>
 
-        <Label text="导入选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label text="导出选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2" alignment="CENTER_LEFT">
             <RadioButton fx:id="localDownload" text="本地" selected="true" styleClass="radio-button">
                 <toggleGroup>
