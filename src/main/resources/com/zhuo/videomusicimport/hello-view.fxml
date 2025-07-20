@@ -17,7 +17,7 @@
         <Label text="音频名称：" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <TextField fx:id="audioNameInput" prefWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <Label text="下载选择：" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label text="导入选择：" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <RadioButton fx:id="localDownload" text="本地" selected="true">
                 <toggleGroup>
