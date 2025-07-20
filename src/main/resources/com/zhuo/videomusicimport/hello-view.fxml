@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.zhuo.videomusicimport.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="视频链接：" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="urlInput" prefWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+        <Label text="音频名称：" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="audioNameInput" prefWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+        <Label text="下载选择：" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <RadioButton fx:id="localDownload" text="本地" selected="true">
+                <toggleGroup>
+                    <ToggleGroup fx:id="downloadType"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="cloudDownload" text="网易云（待实装）" toggleGroup="$downloadType"/>
+        </HBox>
+
+        <Label text="平台选择：" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <RadioButton fx:id="bilibiliPlatform" text="B站" selected="true">
+                <toggleGroup>
+                    <ToggleGroup fx:id="platformType"/>
+                </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="youtubePlatform" text="Youtube（待实装）" toggleGroup="$platformType"/>
+        </HBox>
+
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <Button fx:id="downloadButton" text="开始下载" onAction="#onDownloadButtonClick"/>
+            <Button text="设置" onAction="#onSettingsButtonClick"/>
+        </HBox>
+    </GridPane>
+</VBox>
