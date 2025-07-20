@@ -12,7 +12,7 @@
         <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
     </padding>
 
-    <Label text="视频音频导入工具" styleClass="title-label"/>
+    <Label text="视频音频导出工具" styleClass="title-label"/>
 
     <GridPane hgap="15" vgap="15" styleClass="content-grid">
         <columnConstraints>
@@ -25,8 +25,10 @@
                   promptText="请输入视频链接" GridPane.hgrow="ALWAYS"/>
 
         <Label text="音频名称：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="audioNameInput" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                  promptText="请输入音频保存名称" GridPane.hgrow="ALWAYS"/>
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="audioNameInput" styleClass="text-input" promptText="请输入音频保存名称" HBox.hgrow="ALWAYS"/>
+            <ComboBox fx:id="formatComboBox" styleClass="format-combo-box" promptText="选择格式"/>
+        </HBox>
 
         <Label text="导入选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2" alignment="CENTER_LEFT">
@@ -35,7 +37,6 @@
                     <ToggleGroup fx:id="downloadType"/>
                 </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="cloudDownload" text="网易云（待实装）" toggleGroup="$downloadType" styleClass="radio-button"/>
         </HBox>
 
         <Label text="平台选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
@@ -46,7 +47,6 @@
                 </toggleGroup>
             </RadioButton>
             <RadioButton fx:id="bilibiliPlatform" text="B站" toggleGroup="$platformType" styleClass="radio-button"/>
-            <RadioButton fx:id="youtubePlatform" text="Youtube（待实装）" toggleGroup="$platformType" styleClass="radio-button"/>
         </HBox>
 
         <HBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_RIGHT">

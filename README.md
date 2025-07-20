@@ -1,6 +1,6 @@
-# VideoMusicImport
+# VideoMusicExport
 
-这是一个用于视频音乐导入的 Java 应用程序，基于 JavaFX 开发。该工具可以帮助用户从视频平台中提取音频。
+这是一个用于视频音乐导出的 Java 应用程序，基于 JavaFX 开发。该工具可以帮助用户从视频平台中提取音频。
 
 ## 功能特点
 

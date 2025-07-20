@@ -9,14 +9,17 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController implements Initializable {
     @FXML
     private TextField urlInput;
 
@@ -27,13 +30,7 @@ public class MainController {
     private RadioButton localDownload;
 
     @FXML
-    private RadioButton cloudDownload;
-
-    @FXML
     private RadioButton bilibiliPlatform;
-
-    @FXML
-    private RadioButton youtubePlatform;
 
     @FXML
     private RadioButton localPlatform;
@@ -43,6 +40,9 @@ public class MainController {
 
     @FXML
     private ToggleGroup platformType;
+
+    @FXML
+    private ComboBox<String> formatComboBox;
 
     @FXML
     protected void onDownloadButtonClick() {
@@ -102,14 +102,15 @@ public class MainController {
                         // 更新状态：提取音频
                         updateProgress(1, 3);
                         updateMessage("正在提取音频...");
-                        byte[] audioAsBytes = FFmpegUtils.extractAudioAsBytes(videoFile);
+                        // 使用选定的音频格式
+                        byte[] audioAsBytes = FFmpegUtils.extractAudioAsBytes(videoFile, formatComboBox.getValue());
 
                         // 准备音频文件名
                         String finalAudioName;
                         if (audioName.isBlank()) {
-                            finalAudioName = "audio_" + System.currentTimeMillis() + ".mp3";
+                            finalAudioName = "audio_" + System.currentTimeMillis() + "." + formatComboBox.getValue();
                         } else {
-                            finalAudioName = audioName + ".mp3";
+                            finalAudioName = audioName + "." + formatComboBox.getValue();
                         }
 
                         // 更新状态：保存音频
@@ -196,4 +197,19 @@ public class MainController {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // 初始化音频格式下拉框
+        formatComboBox.getItems().addAll(
+            FFmpegUtils.FORMAT_MP3,
+            FFmpegUtils.FORMAT_WAV,
+            FFmpegUtils.FORMAT_AAC,
+            FFmpegUtils.FORMAT_FLAC,
+            FFmpegUtils.FORMAT_OGG,
+            FFmpegUtils.FORMAT_M4A
+        );
+        formatComboBox.setValue(FFmpegUtils.FORMAT_MP3); // 默认选择MP3格式
+    }
 }
+
