@@ -40,11 +40,12 @@
 
         <Label text="平台选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="CENTER_LEFT">
-            <RadioButton fx:id="bilibiliPlatform" text="B站" selected="true" styleClass="radio-button">
+            <RadioButton fx:id="localPlatform" text="本地" selected="true" styleClass="radio-button">
                 <toggleGroup>
                     <ToggleGroup fx:id="platformType"/>
                 </toggleGroup>
             </RadioButton>
+            <RadioButton fx:id="bilibiliPlatform" text="B站" toggleGroup="$platformType" styleClass="radio-button"/>
             <RadioButton fx:id="youtubePlatform" text="Youtube（待实装）" toggleGroup="$platformType" styleClass="radio-button"/>
         </HBox>
 

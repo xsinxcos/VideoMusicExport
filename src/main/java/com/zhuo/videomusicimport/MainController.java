@@ -5,18 +5,16 @@ import com.zhuo.videomusicimport.saver.SaverFactory;
 import com.zhuo.videomusicimport.spider.Downloader;
 import com.zhuo.videomusicimport.spider.DownloaderFactory;
 import com.zhuo.videomusicimport.utils.FFmpegUtils;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 
 public class MainController {
     @FXML
@@ -38,13 +36,16 @@ public class MainController {
     private RadioButton youtubePlatform;
 
     @FXML
+    private RadioButton localPlatform;
+
+    @FXML
     private ToggleGroup downloadType;
 
     @FXML
     private ToggleGroup platformType;
 
     @FXML
-    protected void onDownloadButtonClick() throws IOException {
+    protected void onDownloadButtonClick() {
         String url = urlInput.getText();
         String audioName = audioNameInput.getText();
         Downloader downloader = null;
@@ -56,34 +57,109 @@ public class MainController {
             showAlert("错误", "请输入视频链接");
             return;
         }
-        if (bilibiliPlatform.isSelected()) {
+
+        // 根据平台选择创建下载器
+        if (localPlatform.isSelected()) {
+            downloader = DownloaderFactory.getDownloader(DownloaderFactory.LOCAL);
+        } else if (bilibiliPlatform.isSelected()) {
             downloader = DownloaderFactory.getDownloader(DownloaderFactory.BILIBILI);
         }
+
         if (localDownload.isSelected()) {
             saver = SaverFactory.getSaver(SaverFactory.local);
         }
+
         if (downloader != null && saver != null) {
-            File videoFile = null;
-            try {
-                videoFile = downloader.crawl(url);
-                byte[] audioAsBytes = FFmpegUtils.extractAudioAsBytes(videoFile);
-                if (audioName.isBlank()) {
-                    audioName = "audio_" + System.currentTimeMillis() + ".mp3";
-                } else {
-                    audioName += ".mp3";
+            // 创建进度对话框
+            Dialog<Void> progressDialog = new Dialog<>();
+            progressDialog.setTitle("处理中");
+            progressDialog.setHeaderText(null);
+            progressDialog.initModality(Modality.APPLICATION_MODAL);
+
+            // 创建进度条
+            ProgressBar progressBar = new ProgressBar(0);
+            progressBar.setPrefWidth(300);
+            Label statusLabel = new Label("准备开始...");
+
+            // 设置对话框内容
+            DialogPane dialogPane = progressDialog.getDialogPane();
+            dialogPane.setContent(new javafx.scene.layout.VBox(10, statusLabel, progressBar));
+            dialogPane.getButtonTypes().add(ButtonType.CANCEL);
+
+            // 创建后台任务
+            final Downloader finalDownloader = downloader;
+            final Saver finalSaver = saver;
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    File videoFile = null;
+                    try {
+                        // 更新状态：下载视频
+                        updateProgress(0, 3);
+                        updateMessage("正在下载视频...");
+                        videoFile = finalDownloader.crawl(url);
+
+                        // 更新状态：提取音频
+                        updateProgress(1, 3);
+                        updateMessage("正在提取音频...");
+                        byte[] audioAsBytes = FFmpegUtils.extractAudioAsBytes(videoFile);
+
+                        // 准备音频文件名
+                        String finalAudioName;
+                        if (audioName.isBlank()) {
+                            finalAudioName = "audio_" + System.currentTimeMillis() + ".mp3";
+                        } else {
+                            finalAudioName = audioName + ".mp3";
+                        }
+
+                        // 更新状态：保存音频
+                        updateProgress(2, 3);
+                        updateMessage("正在保存音频...");
+                        finalSaver.save(audioAsBytes, downloadPath + "/" + finalAudioName);
+
+                        // 完成
+                        updateProgress(3, 3);
+                        updateMessage("处理完成！");
+
+                        Platform.runLater(() -> {
+                            progressDialog.setResult(null);
+                            progressDialog.close();
+                            showSuccess("下载成功", "音频已保存到指定目录");
+                        });
+
+                        return null;
+                    } catch (Exception e) {
+                        Platform.runLater(() -> {
+                            progressDialog.close();
+                            showAlert("下载失败", e.getMessage());
+                        });
+                        throw e;
+                    } finally {
+                        if (videoFile != null) {
+                            videoFile.delete();
+                        }
+                    }
                 }
-                saver.save(audioAsBytes, downloadPath + "/" + audioName);
-                // 显示成功提示
-                showSuccess("下载成功", "音频已保存到指定目录");
-            } catch (Exception e) {
-                showAlert("下载失败", e.getMessage());
-                throw new RuntimeException(e);
-            } finally {
-                //删除视频文件
-                if (videoFile != null) {
-                    videoFile.delete();
-                }
-            }
+            };
+
+            // 绑定进度条和状态标签
+            progressBar.progressProperty().bind(task.progressProperty());
+            statusLabel.textProperty().bind(task.messageProperty());
+
+            // 处理取消按钮
+            dialogPane.getButtonTypes().setAll(ButtonType.CANCEL);
+            dialogPane.lookupButton(ButtonType.CANCEL).setOnMouseClicked(event -> {
+                task.cancel();
+                progressDialog.close();
+            });
+
+            // 启动任务
+            Thread thread = new Thread(task);
+            thread.setDaemon(true);
+            thread.start();
+
+            // 显示对话框
+            progressDialog.showAndWait();
         }
     }
 
