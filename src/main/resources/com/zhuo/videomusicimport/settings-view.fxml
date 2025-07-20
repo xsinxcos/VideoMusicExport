@@ -5,21 +5,31 @@
 <?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.zhuo.videomusicimport.SettingsController">
+      fx:controller="com.zhuo.videomusicimport.SettingsController"
+      stylesheets="@styles.css"
+      styleClass="root-container">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
     </padding>
 
-    <GridPane hgap="10" vgap="10">
-        <Label text="下载目录：" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <TextField fx:id="downloadPathField" prefWidth="300" editable="false"/>
-            <Button text="选择目录" onAction="#onChooseDirectory"/>
+    <Label text="设置" styleClass="title-label"/>
+
+    <GridPane hgap="15" vgap="15" styleClass="content-grid">
+        <columnConstraints>
+            <ColumnConstraints minWidth="80" prefWidth="100" maxWidth="120"/>
+            <ColumnConstraints minWidth="200" prefWidth="400" hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="下载目录：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <HBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER_LEFT">
+            <TextField fx:id="downloadPathField" styleClass="text-input" editable="false"
+                      promptText="请选择下载目录" HBox.hgrow="ALWAYS"/>
+            <Button text="选择目录" onAction="#onChooseDirectory" styleClass="secondary-button"/>
         </HBox>
 
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <Button text="保存" onAction="#onSave"/>
-            <Button text="取消" onAction="#onCancel"/>
+        <HBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="1" alignment="CENTER_RIGHT">
+            <Button text="保存" onAction="#onSave" styleClass="primary-button"/>
+            <Button text="取消" onAction="#onCancel" styleClass="secondary-button"/>
         </HBox>
     </GridPane>
 </VBox>

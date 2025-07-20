@@ -5,41 +5,52 @@
 <?import javafx.scene.layout.*?>
 
 <VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.zhuo.videomusicimport.MainController">
+      fx:controller="com.zhuo.videomusicimport.MainController"
+      stylesheets="@styles.css"
+      styleClass="root-container">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
     </padding>
 
-    <GridPane hgap="10" vgap="10">
-        <Label text="视频链接：" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="urlInput" prefWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+    <Label text="视频音频导入工具" styleClass="title-label"/>
 
-        <Label text="音频名称：" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-        <TextField fx:id="audioNameInput" prefWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+    <GridPane hgap="15" vgap="15" styleClass="content-grid">
+        <columnConstraints>
+            <ColumnConstraints minWidth="80" prefWidth="100" maxWidth="120"/>
+            <ColumnConstraints minWidth="200" prefWidth="400" hgrow="ALWAYS"/>
+        </columnConstraints>
 
-        <Label text="导入选择：" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2">
-            <RadioButton fx:id="localDownload" text="本地" selected="true">
+        <Label text="视频链接：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="urlInput" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="0"
+                  promptText="请输入视频链接" GridPane.hgrow="ALWAYS"/>
+
+        <Label text="音频名称：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="audioNameInput" styleClass="text-input" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                  promptText="请输入音频保存名称" GridPane.hgrow="ALWAYS"/>
+
+        <Label text="导入选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="2" alignment="CENTER_LEFT">
+            <RadioButton fx:id="localDownload" text="本地" selected="true" styleClass="radio-button">
                 <toggleGroup>
                     <ToggleGroup fx:id="downloadType"/>
                 </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="cloudDownload" text="网易云（待实装）" toggleGroup="$downloadType"/>
+            <RadioButton fx:id="cloudDownload" text="网易云（待实装）" toggleGroup="$downloadType" styleClass="radio-button"/>
         </HBox>
 
-        <Label text="平台选择：" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <RadioButton fx:id="bilibiliPlatform" text="B站" selected="true">
+        <Label text="平台选择：" styleClass="field-label" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <HBox spacing="20" GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="CENTER_LEFT">
+            <RadioButton fx:id="bilibiliPlatform" text="B站" selected="true" styleClass="radio-button">
                 <toggleGroup>
                     <ToggleGroup fx:id="platformType"/>
                 </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="youtubePlatform" text="Youtube（待实装）" toggleGroup="$platformType"/>
+            <RadioButton fx:id="youtubePlatform" text="Youtube（待实装）" toggleGroup="$platformType" styleClass="radio-button"/>
         </HBox>
 
-        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
-            <Button fx:id="downloadButton" text="开始下载" onAction="#onDownloadButtonClick"/>
-            <Button text="设置" onAction="#onSettingsButtonClick"/>
+        <HBox spacing="15" GridPane.columnIndex="1" GridPane.rowIndex="4" alignment="CENTER_RIGHT">
+            <Button fx:id="downloadButton" text="开始下载" onAction="#onDownloadButtonClick" styleClass="primary-button"/>
+            <Button text="设置" onAction="#onSettingsButtonClick" styleClass="secondary-button"/>
         </HBox>
     </GridPane>
 </VBox>
